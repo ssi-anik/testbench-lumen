@@ -3,7 +3,7 @@
 namespace Anik\Testbench\Tests\Integration;
 
 use Anik\Testbench\TestCase;
-use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Throwable;
 
 class EloquentTest extends TestCase
@@ -24,19 +24,28 @@ class EloquentTest extends TestCase
         ]);
     }
 
+    protected function getEloquentModel(): Model
+    {
+        return new class extends Model {
+            protected $table = 'users';
+            protected $fillable = ['name', 'email'];
+        };
+    }
+
     public function testEloquentIsNotLoaded()
     {
         // For the following test, it'll load Eloquent.
         static::$LOAD_ELOQUENT = true;
 
         $this->expectException(Throwable::class);
-        User::create(['name' => 'testbench-lumen']);
+        $class = $this->getEloquentModel();
+        $class::create(['name' => 'testbench-lumen']);
     }
 
     public function testEloquentIsLoaded()
     {
         $this->runMigration();
-        $user = (new User())->fill([
+        $user = ($this->getEloquentModel())->fill([
             'name' => 'testbench-lumen',
             'email' => 'testbench.lumen@example.com',
         ]);
@@ -55,7 +64,7 @@ class EloquentTest extends TestCase
 
         $this->runMigration();
 
-        $user = (new User())->fill([
+        $user = ($this->getEloquentModel())->fill([
             'name' => 'testbench-lumen',
             'email' => 'testbench.lumen@example.com',
         ]);
