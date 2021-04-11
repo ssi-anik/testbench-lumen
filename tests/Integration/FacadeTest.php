@@ -22,7 +22,7 @@ class FacadeTest extends TestCase
         // For the following test, it'll load facade.
         static::$LOAD_FACADE = true;
 
-        $this->expectException(RuntimeException::class);
+        $this->expectException(\Exception::class);
         App::environment();
     }
 
