@@ -26,8 +26,11 @@ trait Event
 
         $mock->shouldReceive('dispatch')->andReturnUsing(function ($called) use (&$events) {
             foreach ($events as $key => $event) {
-                if ((is_string($called) && $called === $event) || (is_string($called) && is_subclass_of($called,
-                            $event)) || (is_object($called) && $called instanceof $event)) {
+                if (
+                    (is_string($called) && $called === $event)
+                    || (is_string($called) && is_subclass_of($called, $event))
+                    || (is_object($called) && $called instanceof $event)
+                ) {
                     unset($events[$key]);
                 }
             }

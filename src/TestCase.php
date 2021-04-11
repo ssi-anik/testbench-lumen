@@ -15,7 +15,13 @@ use PHPUnit\Framework\TestCase as PHPUnit;
 
 abstract class TestCase extends PHPUnit
 {
-    use Auth, Console, CreateApplication, Database, Event, MakesHttpRequests, Testing;
+    use Auth;
+    use Console;
+    use CreateApplication;
+    use Database;
+    use Event;
+    use MakesHttpRequests;
+    use Testing;
 
     /**
      * The application instance.

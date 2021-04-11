@@ -19,9 +19,15 @@ trait Database
     {
         $count = $this->app->make('db')->connection($onConnection)->table($table)->where($data)->count();
 
-        $this->assertGreaterThan(0, $count,
-            sprintf('Unable to find row in database table [%s] that matched attributes [%s].', $table,
-                json_encode($data)));
+        $this->assertGreaterThan(
+            0,
+            $count,
+            sprintf(
+                'Unable to find row in database table [%s] that matched attributes [%s].',
+                $table,
+                json_encode($data)
+            )
+        );
 
         return $this;
     }
@@ -53,9 +59,15 @@ trait Database
     {
         $count = $this->app->make('db')->connection($onConnection)->table($table)->where($data)->count();
 
-        $this->assertEquals(0, $count,
-            sprintf('Found unexpected records in database table [%s] that matched attributes [%s].', $table,
-                json_encode($data)));
+        $this->assertEquals(
+            0,
+            $count,
+            sprintf(
+                'Found unexpected records in database table [%s] that matched attributes [%s].',
+                $table,
+                json_encode($data)
+            )
+        );
 
         return $this;
     }
