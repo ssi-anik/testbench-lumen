@@ -100,14 +100,6 @@ trait Testing
 
         $this->hasSetUpRun = false;
 
-        if (class_exists(Mockery::class)) {
-            if (($container = Mockery::getContainer()) !== null) {
-                $this->addToAssertionCount($container->mockery_getExpectationCount());
-            }
-
-            Mockery::close();
-        }
-
         $this->afterApplicationCreatedCallbacks = [];
         $this->afterApplicationRefreshedCallbacks = [];
         $this->beforeApplicationDestroyedCallbacks = [];
@@ -115,6 +107,14 @@ trait Testing
         $this->fireAfterApplicationDestroyed();
 
         $this->afterApplicationDestroyedCallbacks = [];
+
+        if (class_exists(Mockery::class)) {
+            if (($container = Mockery::getContainer()) !== null) {
+                $this->addToAssertionCount($container->mockery_getExpectationCount());
+            }
+
+            Mockery::close();
+        }
     }
 
     protected function refreshApplication(): void
