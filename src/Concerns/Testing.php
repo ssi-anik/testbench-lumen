@@ -161,9 +161,9 @@ trait Testing
 
     final protected function runThroughAnnotatedMethods()
     {
-        array_reduce($this->parseAnnotation('setup-before', static::class, $this->getName(false)),
-            function ($carry, $next) {
-                return call_user_func_array([$this, $next], [$this->app, $carry]);
-            });
+        $annotations = $this->parseAnnotation('setup-before', static::class, $this->getName(false));
+        array_reduce($annotations, function ($carry, $next) {
+            return call_user_func_array([$this, $next], [$this->app, $carry]);
+        });
     }
 }
