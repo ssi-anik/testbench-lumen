@@ -7,13 +7,13 @@ use PHPUnit\Util\Test;
 
 trait Annotation
 {
-    protected function parseAnnotation(string $annotation): array
+    protected function parseAnnotation(string $annotation, string $class, string $ofMethod): array
     {
         if (!$this instanceof TestCase) {
             return [];
         }
 
-        $annotations = Test::parseTestMethodAnnotations(static::class, $this->getName(false));
+        $annotations = Test::parseTestMethodAnnotations($class, $ofMethod);
 
         return $annotations['method'][$annotation] ?? [];
     }
