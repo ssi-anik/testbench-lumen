@@ -52,3 +52,27 @@ jobs:
 
       - name: Run test suite
         run: ./vendor/bin/phpunit --testdox --verbose
+
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          coverage: pcov
+          php-version: 8.0
+
+      - name: Install dependencies
+        run: composer require laravel/lumen:"^8" --no-interaction --prefer-dist
+
+      - name: Run tests for coverage
+        run: ./vendor/bin/phpunit --coverage-clover=coverage.xml
+
+      - name: Push to Codecov
+        run: bash <(curl -s https://codecov.io/bash)
+          env:
+            CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
