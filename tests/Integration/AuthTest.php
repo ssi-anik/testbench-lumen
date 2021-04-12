@@ -59,16 +59,4 @@ class AuthTest extends TestCase
 
         $this->actingAs($user)->get('/guarded')->seeStatusCode(200);
     }
-
-    /*public function testDependencyInjectionIsWorkingCorrectly()
-    {
-        $this->call('GET', 'test', ['name' => 'testbench-lumen', 'env' => 'testing']);
-        $response = $this->response->getData(true);
-
-        $this->assertArrayHasKey('data', $response);
-        $this->assertArrayHasKey('name', $response['data']);
-        $this->assertArrayHasKey('env', $response['data']);
-        $this->assertTrue('testing' == $response['data']['env']);
-        $this->assertTrue('testbench-lumen' == $response['data']['name']);
-    }*/
 }
