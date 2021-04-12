@@ -40,4 +40,25 @@ class ApplicationCallbacksTest extends TestCase
 
         parent::tearDown();
     }
+
+    public function testCreatedAndRefreshedCallbacksAreCalledImmediately()
+    {
+        $isInvoked = false;
+        $afterCreated = Mockery::mock()->shouldReceive('__invoke')->with(Mockery::on(function ($app) use (&$isInvoked) {
+            $isInvoked = true;
+
+            return $app instanceof Application;
+        }))->times(1)->getMock();
+        $this->afterApplicationCreated([$afterCreated, '__invoke']);
+        $this->assertTrue($isInvoked);
+
+        $isInvoked = false;
+        $afterRefresh = Mockery::mock()->shouldReceive('__invoke')->with(Mockery::on(function ($app) use (&$isInvoked) {
+            $isInvoked = true;
+
+            return $app instanceof Application;
+        }))->times(1)->getMock();
+        $this->afterApplicationRefreshed([$afterRefresh, '__invoke']);
+        $this->assertTrue($isInvoked);
+    }
 }
