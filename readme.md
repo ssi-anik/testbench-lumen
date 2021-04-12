@@ -5,7 +5,7 @@ testbench-lumen
 ==============
 
 `anik/testbench-lumen` is a package, highly inspired by
-the [orchestra/testbench](https://github.com/orchestral/testbench). `orchestral/testbench` that is a tool for testing
+the [orchestral/testbench](https://github.com/orchestral/testbench). `orchestral/testbench` that is a tool for testing
 Laravel packages. Whereas the `anik/testbench-lumen` can only be used with [Lumen](https://github.com/laravel/lumen),
 starting from Lumen `6.x` and afterwards.
 
