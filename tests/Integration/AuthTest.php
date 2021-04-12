@@ -5,6 +5,7 @@ namespace Anik\Testbench\Tests\Integration;
 use Anik\Testbench\TestCase;
 use Anik\Testbench\Tests\Extensions\Helper;
 use App\Providers\AuthServiceProvider;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Contracts\Auth\Factory;
 use Laravel\Lumen\Routing\Router;
@@ -21,6 +22,11 @@ class AuthTest extends TestCase
     protected function serviceProviders(): array
     {
         return [AuthServiceProvider::class];
+    }
+
+    protected function dontReportExceptions(): array
+    {
+        return [AuthenticationException::class];
     }
 
     protected function setUp(): void

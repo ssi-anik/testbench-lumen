@@ -76,9 +76,21 @@ trait CreateApplication
         $app->withEloquent();
     }
 
+    protected function dontReportExceptions(): array
+    {
+        return [];
+    }
+
     final protected function bindExceptionHandler(Application $app): void
     {
-        $app->singleton(ExceptionHandler::class, Handler::class);
+        $app->singleton(ExceptionHandler::class, function () use ($app) {
+            return new class ($this->dontReportExceptions()) extends Handler {
+                public function __construct(array $dontReport = [])
+                {
+                    $this->dontReport = array_merge($this->dontReport, $dontReport);
+                }
+            };
+        });
     }
 
     final protected function bindConsoleKernel(Application $app): void
