@@ -33,12 +33,12 @@ trait CreateApplication
         //
     }
 
-    protected function globalMiddlewares(): array
+    protected function globalMiddlewares(Application $app): array
     {
         return [];
     }
 
-    protected function routeMiddlewares(): array
+    protected function routeMiddlewares(Application $app): array
     {
         return [];
     }
@@ -59,11 +59,11 @@ trait CreateApplication
 
     final protected function registerMiddlewares(Application $app)
     {
-        if ($routeMiddlewares = $this->routeMiddlewares()) {
+        if ($routeMiddlewares = $this->routeMiddlewares($app)) {
             $app->routeMiddleware($routeMiddlewares);
         }
 
-        if ($globalMiddlewares = $this->globalMiddlewares()) {
+        if ($globalMiddlewares = $this->globalMiddlewares($app)) {
             $app->middleware($globalMiddlewares);
         }
     }
