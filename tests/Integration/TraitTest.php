@@ -4,6 +4,7 @@ namespace Anik\Testbench\Tests\Integration;
 
 use Anik\Testbench\TestCase;
 use App\Providers\AuthServiceProvider;
+use Illuminate\Contracts\Auth\Factory;
 use Laravel\Lumen\Routing\Router;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
@@ -31,7 +32,7 @@ class TraitTest extends TestCase
     {
         $router->group(['middleware' => 'auth'], function ($router) {
             $router->get('guarded', function () {
-                return response()->json(['user' => auth()->user() ?? 'middleware bypassed']);
+                return response()->json(['user' => app(Factory::class)->user() ?? 'middleware bypassed']);
             });
         });
     }
