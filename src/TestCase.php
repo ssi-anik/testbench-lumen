@@ -9,6 +9,7 @@ use Anik\Testbench\Concerns\Console;
 use Anik\Testbench\Concerns\CreateApplication;
 use Anik\Testbench\Concerns\Database;
 use Anik\Testbench\Concerns\Event;
+use Anik\Testbench\Concerns\Job;
 use Anik\Testbench\Concerns\Testing;
 use Laravel\Lumen\Testing\Concerns\MakesHttpRequests;
 use PHPUnit\Framework\TestCase as PHPUnit;
@@ -20,6 +21,7 @@ abstract class TestCase extends PHPUnit
     use CreateApplication;
     use Database;
     use Event;
+    use Job;
     use MakesHttpRequests;
     use Testing;
 

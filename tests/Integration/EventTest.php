@@ -17,5 +17,8 @@ class EventTest extends TestCase
     {
         $this->expectsEvents(ExampleEvent::class);
         $this->app['events']->dispatch(new ExampleEvent());
+
+        $this->withoutEvents();
+        $this->app['events']->dispatch(new ExampleEvent());
     }
 }

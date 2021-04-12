@@ -17,7 +17,7 @@ trait Job
      *
      * @return $this
      */
-    protected function expectsJobs($jobs)
+    protected function expectsJobs($jobs): self
     {
         $jobs = is_array($jobs) ? $jobs : func_get_args();
 
