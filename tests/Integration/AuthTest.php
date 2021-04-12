@@ -8,6 +8,7 @@ use App\Providers\AuthServiceProvider;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Contracts\Auth\Factory;
+use Laravel\Lumen\Application;
 use Laravel\Lumen\Routing\Router;
 
 class AuthTest extends TestCase
@@ -29,10 +30,9 @@ class AuthTest extends TestCase
         return [AuthenticationException::class];
     }
 
-    protected function setUp(): void
+    protected function routeMiddlewares(Application $app): array
     {
-        parent::setUp();
-        $this->app->routeMiddleware(['auth' => Authenticate::class]);
+        return ['auth' => Authenticate::class];
     }
 
     protected function routes(Router $router): void
