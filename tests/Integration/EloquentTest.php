@@ -3,33 +3,19 @@
 namespace Anik\Testbench\Tests\Integration;
 
 use Anik\Testbench\TestCase;
-use Illuminate\Database\Eloquent\Model;
+use Anik\Testbench\Tests\Extensions\Helper;
 use Throwable;
 
 class EloquentTest extends TestCase
 {
+    use Helper;
+
     protected static $LOAD_ELOQUENT = false;
 
     protected function withEloquent(): bool
     {
         // value gets changed in the following methods
         return static::$LOAD_ELOQUENT;
-    }
-
-    protected function runMigration()
-    {
-        $this->artisan('migrate:fresh', [
-            '--path' => realpath(dirname(__DIR__) . '/Migrations'),
-            '--realpath' => true,
-        ]);
-    }
-
-    protected function getEloquentModel(): Model
-    {
-        return new class extends Model {
-            protected $table = 'users';
-            protected $fillable = ['name', 'email'];
-        };
     }
 
     public function testEloquentIsNotLoaded()
@@ -45,13 +31,8 @@ class EloquentTest extends TestCase
     public function testEloquentIsLoaded()
     {
         $this->runMigration();
-        $user = ($this->getEloquentModel())->fill([
-            'name' => 'testbench-lumen',
-            'email' => 'testbench.lumen@example.com',
-        ]);
-        $user->password = app('hash')->make('12345');
-        $user->save();
 
+        $user = $this->createUser();
         $this->assertTrue(1 === $user->id);
 
         // reverting to original state
@@ -64,12 +45,7 @@ class EloquentTest extends TestCase
 
         $this->runMigration();
 
-        $user = ($this->getEloquentModel())->fill([
-            'name' => 'testbench-lumen',
-            'email' => 'testbench.lumen@example.com',
-        ]);
-        $user->password = app('hash')->make('12345');
-        $user->save();
+        $user = $this->createUser();
 
         $this->assertTrue(1 === $user->id);
     }
