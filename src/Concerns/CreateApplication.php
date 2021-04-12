@@ -35,7 +35,6 @@ trait CreateApplication
 
     protected function createApplication(): Application
     {
-        $this->loadEnvironments();
         $app = $this->resolveApplication();
         $this->loadWithFacade($app);
         $this->loadWithEloquent($app);
@@ -43,17 +42,21 @@ trait CreateApplication
         $this->bindConsoleKernel($app);
         $this->registerServiceProviders($app);
         $this->bindRouter($app);
+        $this->runThroughAnnotatedMethods($app);
 
         return $app;
     }
 
-    protected function loadEnvironments()
+    protected function runThroughAnnotatedMethods(Application $app)
     {
+        array_reduce($this->parseAnnotation('before-that'), function ($carry, $next) use ($app) {
+            return call_user_func_array([$this, $next], [$app, $carry]);
+        });
     }
 
     protected function resolveApplication(): Application
     {
-        $path = $_ENV['APP_BASE_PATH'] ?? realpath(dirname(__DIR__) . '/../vendor/laravel/lumen');
+        $path = env('APP_BASE_PATH') ?? realpath(dirname(__DIR__) . '/../vendor/laravel/lumen');
 
         return $app = new Application($path);
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Anik\Testbench;
 
+use Anik\Testbench\Concerns\Annotation;
 use Anik\Testbench\Concerns\Auth;
 use Anik\Testbench\Concerns\Console;
 use Anik\Testbench\Concerns\CreateApplication;
@@ -16,6 +17,7 @@ use PHPUnit\Framework\TestCase as PHPUnit;
 
 abstract class TestCase extends PHPUnit
 {
+    use Annotation;
     use Auth;
     use Console;
     use CreateApplication;
