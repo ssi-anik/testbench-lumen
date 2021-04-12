@@ -33,6 +33,16 @@ trait CreateApplication
         //
     }
 
+    protected function globalMiddlewares(): array
+    {
+        return [];
+    }
+
+    protected function routeMiddlewares(): array
+    {
+        return [];
+    }
+
     protected function createApplication(): Application
     {
         $app = $this->resolveApplication();
@@ -42,8 +52,20 @@ trait CreateApplication
         $this->bindConsoleKernel($app);
         $this->registerServiceProviders($app);
         $this->bindRouter($app);
+        $this->registerMiddlewares($app);
 
         return $app;
+    }
+
+    final protected function registerMiddlewares(Application $app)
+    {
+        if ($routeMiddlewares = $this->routeMiddlewares()) {
+            $app->routeMiddleware($routeMiddlewares);
+        }
+
+        if ($globalMiddlewares = $this->globalMiddlewares()) {
+            $app->middleware($globalMiddlewares);
+        }
     }
 
     protected function resolveApplication(): Application
