@@ -6,6 +6,7 @@ use Anik\Testbench\TestCase;
 use Anik\Testbench\Tests\Extensions\Helper;
 use App\Providers\AuthServiceProvider;
 use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Contracts\Auth\Factory;
 use Laravel\Lumen\Routing\Router;
 
 class AuthTest extends TestCase
@@ -32,12 +33,12 @@ class AuthTest extends TestCase
     {
         $router->group(['middleware' => 'auth'], function ($router) {
             $router->get('guarded', function () {
-                return response()->json(['user' => auth()->user()]);
+                return response()->json(['user' => app(Factory::class)->user()]);
             });
         });
 
         $router->get('unguarded', function () {
-            return response()->json(['user' => auth()->user()]);
+            return response()->json(['user' => app(Factory::class)->user()]);
         });
     }
 
