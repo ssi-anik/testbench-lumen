@@ -49,7 +49,7 @@ trait CreateApplication
 
     protected function runThroughAnnotatedMethods(Application $app)
     {
-        array_reduce($this->parseAnnotation('before-that'), function ($carry, $next) use ($app) {
+        array_reduce($this->parseAnnotation('setup-before'), function ($carry, $next) use ($app) {
             return call_user_func_array([$this, $next], [$app, $carry]);
         });
     }

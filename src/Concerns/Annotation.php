@@ -9,7 +9,7 @@ trait Annotation
 {
     protected function parseAnnotation(string $annotation): array
     {
-        if (false === $this instanceof TestCase) {
+        if (!$this instanceof TestCase) {
             return [];
         }
 
