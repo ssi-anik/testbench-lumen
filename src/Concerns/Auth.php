@@ -16,7 +16,7 @@ trait Auth
      *
      * @return $this
      */
-    public function actingAs(Authenticatable $user, $driver = null)
+    public function actingAs(Authenticatable $user, $driver = null): self
     {
         $this->be($user, $driver);
 
