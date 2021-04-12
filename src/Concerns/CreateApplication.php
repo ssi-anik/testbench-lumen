@@ -42,16 +42,8 @@ trait CreateApplication
         $this->bindConsoleKernel($app);
         $this->registerServiceProviders($app);
         $this->bindRouter($app);
-        $this->runThroughAnnotatedMethods($app);
 
         return $app;
-    }
-
-    protected function runThroughAnnotatedMethods(Application $app)
-    {
-        array_reduce($this->parseAnnotation('setup-before'), function ($carry, $next) use ($app) {
-            return call_user_func_array([$this, $next], [$app, $carry]);
-        });
     }
 
     protected function resolveApplication(): Application

@@ -49,6 +49,8 @@ abstract class TestCase extends PHPUnit
     protected function setUp(): void
     {
         $this->setUpTestEnvironment();
+
+        $this->runThroughAnnotatedMethods();
     }
 
     /**

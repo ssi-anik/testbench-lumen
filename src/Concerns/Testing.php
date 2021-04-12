@@ -158,4 +158,11 @@ trait Testing
             $this->disableEventsForAllTests();
         }
     }
+
+    final protected function runThroughAnnotatedMethods()
+    {
+        array_reduce($this->parseAnnotation('setup-before'), function ($carry, $next) {
+            return call_user_func_array([$this, $next], [$this->app, $carry]);
+        });
+    }
 }
