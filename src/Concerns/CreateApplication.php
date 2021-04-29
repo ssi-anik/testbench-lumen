@@ -6,10 +6,12 @@ namespace Anik\Testbench\Concerns;
 
 use App\Console\Kernel as ConsoleKernel;
 use App\Exceptions\Handler;
+use Composer\Autoload\ClassLoader;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Laravel\Lumen\Application;
 use Laravel\Lumen\Routing\Router;
+use ReflectionClass;
 
 trait CreateApplication
 {
@@ -68,9 +70,16 @@ trait CreateApplication
         }
     }
 
+    final protected function lumenBasePath(): string
+    {
+        $reflection = new ReflectionClass(ClassLoader::class);
+
+        return dirname(dirname($reflection->getFileName())) . '/laravel/lumen';
+    }
+
     protected function resolveApplication(): Application
     {
-        $path = env('APP_BASE_PATH') ?? realpath(dirname(__DIR__) . '/../vendor/laravel/lumen');
+        $path = env('APP_BASE_PATH') ?? $this->lumenBasePath();
 
         return $app = new Application($path);
     }
