@@ -60,6 +60,8 @@ jobs:
         run: ./vendor/bin/phpunit --testdox --verbose
 
   coverage:
+    needs: tests
+    if: github.ref != 'refs/heads/dev'
     name: Coverage
     runs-on: ubuntu-latest
 
