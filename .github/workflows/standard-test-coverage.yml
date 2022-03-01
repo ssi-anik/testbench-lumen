@@ -1,11 +1,31 @@
-name: Run tests
+name: PSR-12 coding standard, Test, Coverage
 on:
   pull_request:
   push:
     branches:
       - main
+      - dev
 
 jobs:
+  coding-standard:
+    name: PSR-12 coding standard
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.1
+
+      - name: Install PHP code sniffer
+        run: composer global require squizlabs/php_codesniffer
+
+      - name: Check against PSR12 standard
+        run: |
+          `composer global config bin-dir --absolute --quiet`/phpcs --standard=PSR12 ./src
+
+
   tests:
     name: PHP [${{ matrix.php }}] With Lumen [${{ matrix.lumen }}]
     runs-on: ${{ matrix.os }}
@@ -14,15 +34,25 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        php: [ 7.2, 7.3, 7.4, 8.0 ]
-        lumen: [ ^6, ^7, ^8 ]
+        php: [ 7.2, 7.3, 7.4, 8.0, 8.1 ]
+        lumen: [ 6, 7, 8, 9 ]
         exclude:
+          - php: 8.0
+            lumen: 6
+          - php: 8.1
+            lumen: 6
+          - php: 8.0
+            lumen: 7
+          - php: 8.1
+            lumen: 7
           - php: 7.2
-            lumen: ^8
-          - php: 8.0
-            lumen: ^6
-          - php: 8.0
-            lumen: ^7
+            lumen: 8
+          - php: 7.2
+            lumen: 9
+          - php: 7.3
+            lumen: 9
+          - php: 7.4
+            lumen: 9
 
     steps:
       - name: Checkout code
@@ -32,28 +62,16 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
 
-      #- name: Get Composer Cache Directory
-      #  id: composer-cache-dir
-      #  run: |
-      #    echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      #- name: Cache composer dependencies
-      #  id: composer-cache
-      #  uses: actions/cache@v2
-      #  with:
-      #    path: ${{ steps.composer-cache-dir.outputs.dir }}
-      #    key: dependencies-${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
-      #    restore-keys: dependencies-${{ runner.os }}-php-${{ matrix.php }}-composer-
-
       - name: Install dependencies
-        # if: steps.composer-cache.outputs.cache-hit != 'true'
         run: |
-          composer require laravel/lumen:${{ matrix.lumen }} --no-interaction --prefer-dist
+          composer require laravel/lumen:^${{ matrix.lumen }} --no-interaction --prefer-dist
 
       - name: Run test suite
         run: ./vendor/bin/phpunit --testdox --verbose
 
   coverage:
+    needs: tests
+    if: github.ref != 'refs/heads/dev'
     name: Coverage
     runs-on: ubuntu-latest
 
