@@ -17,14 +17,14 @@ trait Helper
         return $this;
     }
 
-    protected function getEloquentModel($fillable): Model
+    protected function getEloquentModel(array $fillable = []): Model
     {
         return new class ($fillable) extends Model implements Authenticatable {
             use \Illuminate\Auth\Authenticatable;
 
             protected $table = 'users';
 
-            public function __construct($fillable)
+            public function __construct(array $fillable = [])
             {
                 $this->fillable = $fillable;
                 parent::__construct();
