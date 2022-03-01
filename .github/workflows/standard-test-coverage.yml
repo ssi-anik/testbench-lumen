@@ -82,10 +82,10 @@ jobs:
       - uses: shivammathur/setup-php@v2
         with:
           coverage: pcov
-          php-version: 8.0
+          php-version: 8.1
 
       - name: Install dependencies
-        run: composer require laravel/lumen:"^8" --no-interaction --prefer-dist
+        run: composer require laravel/lumen:"^9" --no-interaction --prefer-dist
 
       - name: Run tests for coverage
         run: ./vendor/bin/phpunit --coverage-clover=coverage.xml
