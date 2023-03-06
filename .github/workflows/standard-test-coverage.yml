@@ -84,7 +84,7 @@ jobs:
           composer require laravel/lumen:^${{ matrix.lumen }} --no-interaction --prefer-dist
 
       - name: Run test suite
-        run: ./vendor/bin/phpunit --testdox
+        run: ./vendor/bin/phpunit --testdox --verbose
 
   coverage:
     needs: tests
