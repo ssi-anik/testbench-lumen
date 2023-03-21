@@ -6,6 +6,7 @@ namespace Anik\Testbench\Concerns;
 
 use Illuminate\Contracts\Events\Dispatcher;
 use Mockery;
+use PHPUnit\Framework\Assert;
 
 trait Event
 {
@@ -37,9 +38,7 @@ trait Event
         });
 
         $this->beforeApplicationDestroyed(function () use (&$events) {
-            if ($events) {
-                throw new Exception('The following events were not fired: [' . implode(', ', $events) . ']');
-            }
+            Assert::assertEmpty($events);
         });
 
         $this->app->instance('events', $mock);

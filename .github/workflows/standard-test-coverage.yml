@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - dev
 
 jobs:
   coding-standard:
@@ -12,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -27,6 +26,7 @@ jobs:
 
 
   tests:
+    needs: coding-standard
     name: PHP [${{ matrix.php }}] With Lumen [${{ matrix.lumen }}]
     runs-on: ${{ matrix.os }}
 
@@ -34,19 +34,26 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest ]
-        php: [ 7.2, 7.3, 7.4, 8.0, 8.1 ]
-        lumen: [ 6, 7, 8, 9 ]
+        php: [ 7.2, 7.3, 7.4, 8.0, 8.1, 8.2 ]
+        lumen: [ 6, 7, 8, 9, 10 ]
         exclude:
           - php: 8.0
             lumen: 6
           - php: 8.1
             lumen: 6
+          - php: 8.2
+            lumen: 6
+
           - php: 8.0
             lumen: 7
           - php: 8.1
             lumen: 7
+          - php: 8.2
+            lumen: 7
+
           - php: 7.2
             lumen: 8
+
           - php: 7.2
             lumen: 9
           - php: 7.3
@@ -54,9 +61,18 @@ jobs:
           - php: 7.4
             lumen: 9
 
+          - php: 7.2
+            lumen: 10
+          - php: 7.3
+            lumen: 10
+          - php: 7.4
+            lumen: 10
+          - php: 8.0
+            lumen: 10
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - uses: shivammathur/setup-php@v2
         with:
@@ -66,8 +82,23 @@ jobs:
         run: |
           composer require laravel/lumen:^${{ matrix.lumen }} --no-interaction --prefer-dist
 
+      - name: Install PHPUnit
+        run: |
+          if [[ ${{ matrix.lumen }} -ge 10 ]]; then
+            composer require phpunit/phpunit:^10 --no-interaction --prefer-dist --with-all-dependencies
+          elif [[ ${{ matrix.lumen }} -ge 9 ]]; then
+            composer require phpunit/phpunit:^9 --no-interaction --prefer-dist --with-all-dependencies
+          else
+            composer require phpunit/phpunit:^8 --no-interaction --prefer-dist --with-all-dependencies
+          fi
+
       - name: Run test suite
-        run: ./vendor/bin/phpunit --testdox --verbose
+        run: |
+          if [[ ${{ matrix.lumen }} -lt 10 ]]; then
+            ./vendor/bin/phpunit --configuration phpunit9.xml --testdox
+          else
+            ./vendor/bin/phpunit --configuration phpunit.xml --testdox
+          fi
 
   coverage:
     needs: tests
@@ -77,18 +108,18 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - uses: shivammathur/setup-php@v2
         with:
           coverage: pcov
-          php-version: 8.1
+          php-version: 8.2
 
       - name: Install dependencies
-        run: composer require laravel/lumen:"^9" --no-interaction --prefer-dist
+        run: composer require laravel/lumen:"^10" --no-interaction --prefer-dist
 
       - name: Run tests for coverage
-        run: ./vendor/bin/phpunit --coverage-clover=coverage.xml
+        run: ./vendor/bin/phpunit --configuration phpunit.xml --coverage-clover=coverage.xml
 
       - name: Push to Codecov
         run: bash <(curl -s https://codecov.io/bash)
