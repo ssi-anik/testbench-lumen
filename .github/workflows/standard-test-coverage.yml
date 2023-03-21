@@ -84,7 +84,12 @@ jobs:
           composer require laravel/lumen:^${{ matrix.lumen }} --no-interaction --prefer-dist
 
       - name: Run test suite
-        run: ./vendor/bin/phpunit --testdox --verbose
+        run: |
+          if [[ ${{ matrix.lumen }} -lt 10 ]]; then
+          ./vendor/bin/phpunit --configuration phpunit9.xml --testdox
+          else
+          ./vendor/bin/phpunit --configuration phpunit.xml --testdox
+          fi
 
   coverage:
     needs: tests
