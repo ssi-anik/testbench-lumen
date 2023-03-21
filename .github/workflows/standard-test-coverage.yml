@@ -83,12 +83,22 @@ jobs:
         run: |
           composer require laravel/lumen:^${{ matrix.lumen }} --no-interaction --prefer-dist
 
+      - name: Install PHPUnit
+        run: |
+          if [[ ${{ matrix.lumen }} -ge 10 ]]; then
+            composer require phpunit/phpunit:^10 --no-interaction --prefer-dist --with-all-dependencies
+          elif [[ ${{ matrix.lumen }} -ge 9 ]]; then
+            composer require phpunit/phpunit:^9 --no-interaction --prefer-dist --with-all-dependencies
+          else
+            composer require phpunit/phpunit:^8 --no-interaction --prefer-dist --with-all-dependencies
+          fi
+
       - name: Run test suite
         run: |
           if [[ ${{ matrix.lumen }} -lt 10 ]]; then
-          ./vendor/bin/phpunit --configuration phpunit9.xml --testdox
+            ./vendor/bin/phpunit --configuration phpunit9.xml --testdox
           else
-          ./vendor/bin/phpunit --configuration phpunit.xml --testdox
+            ./vendor/bin/phpunit --configuration phpunit.xml --testdox
           fi
 
   coverage:
