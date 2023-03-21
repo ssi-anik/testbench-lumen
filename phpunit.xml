@@ -2,14 +2,11 @@
 <phpunit backupGlobals="false"
          colors="true"
          bootstrap="vendor/autoload.php"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         verbose="true"
+         cacheDirectory=".phpunit.cache"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
 >
     <coverage>
         <include>
