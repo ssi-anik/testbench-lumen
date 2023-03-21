@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - dev
 
 jobs:
   coding-standard:
@@ -117,10 +116,10 @@ jobs:
           php-version: 8.2
 
       - name: Install dependencies
-        run: composer require laravel/lumen:"^9" --no-interaction --prefer-dist
+        run: composer require laravel/lumen:"^10" --no-interaction --prefer-dist
 
       - name: Run tests for coverage
-        run: ./vendor/bin/phpunit --coverage-clover=coverage.xml
+        run: ./vendor/bin/phpunit --configuration phpunit.xml --coverage-clover=coverage.xml
 
       - name: Push to Codecov
         run: bash <(curl -s https://codecov.io/bash)
