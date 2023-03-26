@@ -12,10 +12,10 @@ starting from Lumen `6.x` and afterwards.
 ## Installation
 
 ```shell
-composer require anik/testbench-lumen
+composer require --dev anik/testbench-lumen
 ```
 
-## Docs
+## Documentation
 
 - The package uses the `phpunit.xml`. Set up your environment variables in the `phpunit.xml` file.
 
@@ -36,7 +36,7 @@ your `phpunit.xml` file.
 - Your testcases should extend the `\Anik\Testbench\TestCase` class.
 - Your testcases will have access to the [Lumen testing APIs](https://lumen.laravel.com/docs/master/testing).
 
-## Bootstrapping
+### Bootstrapping
 
 The package internally boots the Lumen application for the test cases. While bootstrapping, you can add some
 functionalities.
@@ -150,13 +150,28 @@ protected function dontReportExceptions(): array
 
 ---
 
-## Annotations
+If it's required to work with the `$app` instance before the service providers are being registered,
+then `beforeServiceProviders` is the method to consider. It'll be called for each test methods.
 
-If your tests need to perform some sort of actions before running it, **i.e.** changing environment values, binding
-something to the container, etc. then you can perform those actions with annotations `@setup-before`. The annotated
-tasks are executed in a synchronous manner, and the returned value from the previous task is carried to the next task.
-Only the method level annotations are executed. The first parameter to the task is the `Laravel\Lumen\Application`
-instance, and the second parameters will the returned value from the previous task.
+```php
+protected function beforeServiceProviders(Application $app)
+{
+    $app['config']->set(['my-package.enabled' => false]);
+}
+```
+
+### Annotations
+
+There are three types of annotations considered during the test run. All the annotated tasks are executed synchronously.
+All the tasks will receive the `\Laravel\Lumen\Application\Application` instance in their parameter.
+
+- `@before-service-providers` - Annotated tasks will run before the service providers are being registered. Maybe
+  useful for modifying values in config before the service provider gets registered.
+- `@after-service-providers` - Annotated tasks will run after the service providers are being registered.
+- `@setup-before` - Annotated tasks will run after the application has boot properly and before running each testcases.
+  If your tests need to perform some sort of actions before running it, **i.e.** changing environment values, binding
+  something to the container, etc. then you can perform those actions with annotations. Only the method level
+  annotations are executed.
 
 See [Annotation Test class](https://github.com/ssi-anik/testbench-lumen/blob/main/tests/Integration/AnnotationTest.php)
 to get the hang of it.
@@ -184,16 +199,25 @@ protected function secondCalled(Application $app)
  */
 public function testMultipleAnnotations()
 {
-    $this->assertTrue('modified' === $this->app->make('value-should-be-found'));
+    $this->assertEquals('modified', $this->app->make('value-should-be-found'));
+}
+
+public function defineEnvironmentVariables(Application $app)
+{
+    $app['config']->set(['testbench-lumen.enabled' => true]);
+}
+
+/**
+ * @before-service-providers defineEnvironmentVariables 
+ */
+public function testDefineEnvAnnotation()
+{
+    $this->assertEquals(true, $this->app['config']->get('testbench-lumen.enabled'));
 }
 ```
 
 ---
 
-## Examples
+### Examples
 
 All the scenarios are covered with tests. You can use them as examples.
-
-## Issues? Bugs or Need a feature?
-
-Not working as expected? Feel free to fork, work on it and send PRs. You're welcome.
