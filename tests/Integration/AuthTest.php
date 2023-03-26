@@ -55,7 +55,7 @@ class AuthTest extends TestCase
         $this->get('/guarded')->seeStatusCode(500);
 
         $response = json_decode($this->get('unguarded')->seeStatusCode(200)->response->getContent(), true);
-        $this->assertTrue(is_null($response['user']));
+        $this->assertNull($response['user']);
 
         $this->actingAs($user)->get('/guarded')->seeStatusCode(200);
     }

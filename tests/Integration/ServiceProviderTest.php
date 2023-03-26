@@ -15,6 +15,9 @@ class ServiceProviderTest extends TestCase
     public function testServiceProviderShouldBeBound()
     {
         $this->assertTrue($this->app->bound(DontUseThisTestServiceProvider::BIND_NAME));
-        $this->assertTrue($this->app->make(DontUseThisTestServiceProvider::BIND_NAME) == DontUseThisTestServiceProvider::BOUND_VALUE);
+        $this->assertEquals(
+            DontUseThisTestServiceProvider::BOUND_VALUE,
+            $this->app->make(DontUseThisTestServiceProvider::BIND_NAME)
+        );
     }
 }
