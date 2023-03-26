@@ -15,6 +15,8 @@ use ReflectionClass;
 
 trait CreateApplication
 {
+    use Annotation;
+
     protected function withFacade(): bool
     {
         return false;
@@ -52,9 +54,12 @@ trait CreateApplication
         $this->loadWithEloquent($app);
         $this->bindExceptionHandler($app);
         $this->bindConsoleKernel($app);
-        $this->registerServiceProviders($app);
-        $this->bindRouter($app);
         $this->registerMiddlewares($app);
+        $this->registerRoutes($app);
+        $this->defineEnvironment($app);
+        $this->runThroughAnnotations('before-service-registration', $app);
+        $this->registerServiceProviders($app);
+        $this->runThroughAnnotations('after-service-registration', $app);
 
         return $app;
     }
@@ -81,7 +86,7 @@ trait CreateApplication
     {
         $path = env('APP_BASE_PATH') ?? $this->lumenBasePath();
 
-        return $app = new Application($path);
+        return new Application($path);
     }
 
     final protected function loadWithFacade(Application $app): void
@@ -131,12 +136,16 @@ trait CreateApplication
         }
     }
 
-    final protected function bindRouter(Application $app)
+    final protected function registerRoutes(Application $app)
     {
         $app->router->get('/', function () use ($app) {
             return $app->version();
         });
 
         $this->routes($app->router);
+    }
+
+    protected function defineEnvironment(Application $app)
+    {
     }
 }

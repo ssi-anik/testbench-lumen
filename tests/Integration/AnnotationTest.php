@@ -37,4 +37,15 @@ class AnnotationTest extends TestCase
     {
         $this->assertEquals('modified', $this->app->make('value-should-be-found'));
     }
+
+    public function defineEnvironmentVariables(Application $app)
+    {
+        $app['config']->set(['testbench-lumen.enabled' => true]);
+    }
+
+    /** @before-service-registration defineEnvironmentVariables */
+    public function testDefineEnvAnnotation()
+    {
+        $this->assertEquals(true, $this->app['config']->get('testbench-lumen.enabled'));
+    }
 }
