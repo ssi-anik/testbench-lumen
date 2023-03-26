@@ -56,10 +56,10 @@ trait CreateApplication
         $this->bindConsoleKernel($app);
         $this->registerMiddlewares($app);
         $this->registerRoutes($app);
-        $this->defineEnvironment($app);
-        $this->runThroughAnnotations('before-service-registration', $app);
+        $this->beforeServiceProviders($app);
+        $this->runThroughAnnotations('before-service-providers', $app);
         $this->registerServiceProviders($app);
-        $this->runThroughAnnotations('after-service-registration', $app);
+        $this->runThroughAnnotations('after-service-providers', $app);
 
         return $app;
     }
@@ -145,7 +145,11 @@ trait CreateApplication
         $this->routes($app->router);
     }
 
-    protected function defineEnvironment(Application $app)
+    protected function beforeServiceProviders(Application $app)
+    {
+    }
+
+    protected function afterServiceProviders(Application $app)
     {
     }
 }
