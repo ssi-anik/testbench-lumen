@@ -57,9 +57,9 @@ trait CreateApplication
         $this->registerMiddlewares($app);
         $this->registerRoutes($app);
         $this->beforeServiceProviders($app);
-        $this->runThroughAnnotations('before-service-providers', $app);
+        $this->runThroughAnnotations('pre-service-providers', $app);
         $this->registerServiceProviders($app);
-        $this->runThroughAnnotations('after-service-providers', $app);
+        $this->runThroughAnnotations('post-service-providers', $app);
 
         return $app;
     }
