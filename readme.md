@@ -165,9 +165,9 @@ protected function beforeServiceProviders(Application $app)
 There are three types of annotations considered during the test run. All the annotated tasks are executed synchronously.
 All the tasks will receive the `\Laravel\Lumen\Application\Application` instance in their parameter.
 
-- `@pre-service-providers` - Annotated tasks will run before the service providers are being registered. Maybe
+- `@pre-service-register` - Annotated tasks will run before the service providers are being registered. Maybe
   useful for modifying values in config before the service provider gets registered.
-- `@post-service-providers` - Annotated tasks will run after the service providers are being registered.
+- `@post-service-register` - Annotated tasks will run after the service providers are being registered.
 - `@setup-before` - Annotated tasks will run after the application has boot properly and before running each testcases.
   If your tests need to perform some sort of actions before running it, **i.e.** changing environment values, binding
   something to the container, etc. then you can perform those actions with annotations. Only the method level
@@ -208,7 +208,7 @@ public function defineEnvironmentVariables(Application $app)
 }
 
 /**
- * @pre-service-providers defineEnvironmentVariables 
+ * @pre-service-register defineEnvironmentVariables 
  */
 public function testDefineEnvAnnotation()
 {
