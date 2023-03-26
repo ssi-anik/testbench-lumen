@@ -26,7 +26,7 @@ class AnnotationTest extends TestCase
      */
     public function testAnnotationFirstOnly()
     {
-        $this->assertTrue('as-is' === $this->app->make('value-should-be-found'));
+        $this->assertEquals('as-is', $this->app->make('value-should-be-found'));
     }
 
     /**
@@ -35,6 +35,17 @@ class AnnotationTest extends TestCase
      */
     public function testMultipleAnnotations()
     {
-        $this->assertTrue('modified' === $this->app->make('value-should-be-found'));
+        $this->assertEquals('modified', $this->app->make('value-should-be-found'));
+    }
+
+    public function defineEnvironmentVariables(Application $app)
+    {
+        $app['config']->set(['testbench-lumen.enabled' => true]);
+    }
+
+    /** @pre-service-providers defineEnvironmentVariables */
+    public function testDefineEnvAnnotation()
+    {
+        $this->assertEquals(true, $this->app['config']->get('testbench-lumen.enabled'));
     }
 }

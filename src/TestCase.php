@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Anik\Testbench;
 
-use Anik\Testbench\Concerns\Annotation;
 use Anik\Testbench\Concerns\Auth;
 use Anik\Testbench\Concerns\Console;
-use Anik\Testbench\Concerns\CreateApplication;
 use Anik\Testbench\Concerns\Database;
 use Anik\Testbench\Concerns\Event;
 use Anik\Testbench\Concerns\Job;
@@ -17,10 +15,8 @@ use PHPUnit\Framework\TestCase as PHPUnit;
 
 abstract class TestCase extends PHPUnit
 {
-    use Annotation;
     use Auth;
     use Console;
-    use CreateApplication;
     use Database;
     use Event;
     use Job;
@@ -50,7 +46,7 @@ abstract class TestCase extends PHPUnit
     {
         $this->setUpTestEnvironment();
 
-        $this->runThroughAnnotatedMethods();
+        $this->runThroughAnnotations('setup-before', $this->app);
     }
 
     /**

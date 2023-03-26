@@ -22,7 +22,7 @@ class RouteBindingTest extends TestCase
     public function testDefaultRouteShouldBeAvailable()
     {
         $response = $this->get('/')->seeStatusCode(200)->response->getContent();
-        $this->assertTrue($response == $this->app->version());
+        $this->assertEquals($this->app->version(), $response);
     }
 
     public function testRouteCanBeBoundSuccessfully()

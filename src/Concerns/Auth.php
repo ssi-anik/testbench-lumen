@@ -11,8 +11,8 @@ trait Auth
     /**
      * Set the currently logged in user for the application.
      *
-     * @param \Illuminate\Contracts\Auth\Authenticatable $user
-     * @param string|null $driver
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string|null  $driver
      *
      * @return $this
      */
@@ -26,8 +26,8 @@ trait Auth
     /**
      * Set the currently logged in user for the application.
      *
-     * @param \Illuminate\Contracts\Auth\Authenticatable $user
-     * @param string|null $driver
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @param  string|null  $driver
      *
      * @return void
      */

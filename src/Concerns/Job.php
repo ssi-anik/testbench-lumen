@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Anik\Testbench\Concerns;
 
+use Illuminate\Contracts\Bus\Dispatcher;
 use Mockery;
 
 trait Job
@@ -13,7 +14,7 @@ trait Job
      *
      * These jobs will be mocked, so that handlers will not actually be executed.
      *
-     * @param array|string $jobs
+     * @param  array|string  $jobs
      *
      * @return $this
      */
@@ -27,7 +28,7 @@ trait Job
             $mock->shouldReceive('dispatch')->atLeast()->once()->with(Mockery::type($job));
         }
 
-        $this->app->instance(\Illuminate\Contracts\Bus\Dispatcher::class, $mock);
+        $this->app->instance(Dispatcher::class, $mock);
 
         return $this;
     }
@@ -45,7 +46,7 @@ trait Job
             $this->dispatchedJobs[] = $dispatched;
         });
 
-        $this->app->instance(\Illuminate\Contracts\Bus\Dispatcher::class, $mock);
+        $this->app->instance(Dispatcher::class, $mock);
 
         return $this;
     }

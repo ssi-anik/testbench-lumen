@@ -9,9 +9,9 @@ trait Database
     /**
      * Assert that a given where condition exists in the database.
      *
-     * @param string $table
-     * @param array $data
-     * @param string|null $onConnection
+     * @param  string  $table
+     * @param  array  $data
+     * @param  string|null  $onConnection
      *
      * @return \Laravel\Lumen\Testing\TestCase
      */
@@ -35,9 +35,9 @@ trait Database
     /**
      * Assert that a given where condition does not exist in the database.
      *
-     * @param string $table
-     * @param array $data
-     * @param string|null $onConnection
+     * @param  string  $table
+     * @param  array  $data
+     * @param  string|null  $onConnection
      *
      * @return $this
      */
@@ -49,9 +49,9 @@ trait Database
     /**
      * Assert that a given where condition does not exist in the database.
      *
-     * @param string $table
-     * @param array $data
-     * @param string|null $onConnection
+     * @param  string  $table
+     * @param  array  $data
+     * @param  string|null  $onConnection
      *
      * @return $this
      */

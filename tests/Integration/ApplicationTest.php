@@ -10,7 +10,7 @@ class ApplicationTest extends TestCase
 {
     public function testAppPropertyInstanceOfLumenApplication()
     {
-        $this->assertTrue($this->app instanceof Application);
+        $this->assertInstanceOf(Application::class, $this->app);
     }
 
     public function testReloadApplication()
@@ -18,7 +18,8 @@ class ApplicationTest extends TestCase
         $this->app->bind('should-exists', function () {
             return 'does-exist';
         });
-        $this->assertTrue($this->app->make('should-exists') == 'does-exist');
+
+        $this->assertEquals('does-exist', $this->app->make('should-exists'));
 
         $this->reloadApplication();
         $this->expectException(BindingResolutionException::class);

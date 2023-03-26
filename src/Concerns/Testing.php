@@ -10,43 +10,16 @@ use Laravel\Lumen\Testing\DatabaseTransactions;
 use Laravel\Lumen\Testing\WithoutEvents;
 use Laravel\Lumen\Testing\WithoutMiddleware;
 use Mockery;
-use PHPUnit\Runner\Version;
-use RuntimeException;
 
 trait Testing
 {
+    use CreateApplication;
+
     protected $afterApplicationCreatedCallbacks = [];
     protected $afterApplicationRefreshedCallbacks = [];
     protected $beforeApplicationDestroyedCallbacks = [];
     protected $afterApplicationDestroyedCallbacks = [];
     protected $hasSetUpRun = false;
-
-    protected function fireCallbacks($callbacks, ...$parameters): void
-    {
-        foreach ($callbacks as $callback) {
-            call_user_func_array($callback, $parameters);
-        }
-    }
-
-    protected function fireAfterApplicationCreated(): void
-    {
-        $this->fireCallbacks($this->afterApplicationCreatedCallbacks, $this->app);
-    }
-
-    protected function fireAfterApplicationRefreshed(): void
-    {
-        $this->fireCallbacks($this->afterApplicationRefreshedCallbacks, $this->app);
-    }
-
-    protected function fireBeforeApplicationDestroyed(): void
-    {
-        $this->fireCallbacks($this->beforeApplicationDestroyedCallbacks, $this->app);
-    }
-
-    protected function fireAfterApplicationDestroyed(): void
-    {
-        $this->fireCallbacks($this->afterApplicationDestroyedCallbacks);
-    }
 
     public function afterApplicationCreated(callable $callback): void
     {
@@ -119,6 +92,33 @@ trait Testing
         }
     }
 
+    protected function fireCallbacks($callbacks, ...$parameters): void
+    {
+        foreach ($callbacks as $callback) {
+            call_user_func_array($callback, $parameters);
+        }
+    }
+
+    protected function fireAfterApplicationCreated(): void
+    {
+        $this->fireCallbacks($this->afterApplicationCreatedCallbacks, $this->app);
+    }
+
+    protected function fireAfterApplicationRefreshed(): void
+    {
+        $this->fireCallbacks($this->afterApplicationRefreshedCallbacks, $this->app);
+    }
+
+    protected function fireBeforeApplicationDestroyed(): void
+    {
+        $this->fireCallbacks($this->beforeApplicationDestroyedCallbacks, $this->app);
+    }
+
+    protected function fireAfterApplicationDestroyed(): void
+    {
+        $this->fireCallbacks($this->afterApplicationDestroyedCallbacks);
+    }
+
     protected function refreshApplication(): void
     {
         if ($this->withFacade()) {
@@ -159,22 +159,5 @@ trait Testing
         if (isset($uses[WithoutEvents::class])) {
             $this->disableEventsForAllTests();
         }
-    }
-
-    protected function getCurrentTestMethodName(): string
-    {
-        if (!class_exists(Version::class)) {
-            throw new RuntimeException('Invalid PHPUnit version.');
-        }
-
-        return version_compare(Version::id(), '10', '>=') ? $this->name() : $this->getName(false);
-    }
-
-    final protected function runThroughAnnotatedMethods()
-    {
-        $annotations = $this->parseAnnotation('setup-before', static::class, $this->getCurrentTestMethodName());
-        array_reduce($annotations, function ($carry, $next) {
-            return call_user_func_array([$this, $next], [$this->app, $carry]);
-        });
     }
 }

@@ -15,7 +15,7 @@ trait Event
      *
      * These events will be mocked, so that handlers will not actually be executed.
      *
-     * @param array|string $events
+     * @param  array|string  $events
      *
      * @return $this
      */
