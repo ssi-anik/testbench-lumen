@@ -11,8 +11,8 @@ trait Console
     /**
      * Call artisan command and return code.
      *
-     * @param string|null $command
-     * @param array $parameters
+     * @param  string|null  $command
+     * @param  array  $parameters
      *
      * @return int|Kernel
      */
